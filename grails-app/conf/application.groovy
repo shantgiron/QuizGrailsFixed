@@ -1,9 +1,10 @@
 
 
 // Added by the Spring Security Core plugin:
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'quizdegrails.User'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'quizdegrails.UserRole'
-grails.plugin.springsecurity.authority.className = 'quizdegrails.Role'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'quizdegrails.Usuario'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'quizdegrails.UsuarioRole'
+grails.plugin.springsecurity.authority.className = 'quiizdegrails.grails.Role'
+
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/',               access: ['permitAll']],
 	[pattern: '/error',          access: ['permitAll']],
@@ -14,7 +15,9 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/js/**',       access: ['permitAll']],
 	[pattern: '/**/css/**',      access: ['permitAll']],
 	[pattern: '/**/images/**',   access: ['permitAll']],
-	[pattern: '/**/favicon.ico', access: ['permitAll']]
+	[pattern: '/**/favicon.ico', access: ['permitAll']],
+	[pattern: '/dbconsole/**',   access: ['permitAll']]
+
 ]
 
 grails.plugin.springsecurity.filterChain.chainMap = [
@@ -23,6 +26,10 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/css/**',      filters: 'none'],
 	[pattern: '/**/images/**',   filters: 'none'],
 	[pattern: '/**/favicon.ico', filters: 'none'],
-	[pattern: '/**',             filters: 'JOINED_FILTERS']
-]
+	[pattern: '/**',             filters: 'JOINED_FILTERS'],
 
+]
+grails.plugin.springsecurity.useSecurityEventListener = true
+grails.plugin.springsecurity.onAbstractAuthenticationFailureEvent = { e, appCtx ->
+	println "\nERROR auth failed for user $e.authentication.name: $e.exception.message\n"
+}

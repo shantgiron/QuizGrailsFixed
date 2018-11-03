@@ -1,42 +1,18 @@
 package quizdegrails
 
-import grails.gorm.transactions.Transactional
-import grails.plugin.springsecurity.SpringSecurityUtils
-import grails.plugin.springsecurity.userdetails.GrailsUserDetailsService
-import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UsernameNotFoundException
+import grails.gorm.services.Service
 
-@Transactional
-class UsuarioService implements GrailsUserDetailsService {
+@Service(Usuario)
+interface UsuarioService {
 
-    static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
+    Usuario get(Serializable id)
 
-    UserDetails loadUserByUsername(String username, boolean loadRoles)
-            throws UsernameNotFoundException {
-        return loadUserByUsername(username)
-    }
+    List<Usuario> list(Map args)
 
-    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Long count()
 
-        User user = User.findByUsername(username)
-        if (!user) throw new NoStackUsernameNotFoundException()
+    void delete(Serializable id)
 
-        def roles = user.authorities
-
-        // or if you are using role groups:
-        // def roles = user.authorities.collect { it.authorities }.flatten().unique()
-
-        def authorities = roles.collect {
-            new SimpleGrantedAuthority(it.authority)
-        }
-
-        return new Usuario(user.username, user.password, user.enabled,
-                !user.accountExpired, !user.accountLocked,
-                !user.passwordExpired, authorities ?: NO_ROLES,
-                user.nombre + " " + user.apellido)
-    }
+    Usuario save(Usuario usuario)
 
 }

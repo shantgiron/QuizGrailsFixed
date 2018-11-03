@@ -2,19 +2,22 @@ package quizdegrails
 
 class BootStrap {
 
-    def springSecurityService
 
     def init = { servletContext ->
 
-        def userRole = new Role(authority: 'ROLE_ADMIN').save()
-        def adminUser = new User(username: 'admin', password: 'admin').save()
+        def adminRole = new Role(authority: 'ROLE_ADMIN').save()
+        def rolUsuario = new Role(authority: "ROLE_USER").save()
 
-        UserRole.create adminUser, userRole
+        def testUser = new Usuario(username: 'admin', password: 'admin').save()
 
-        UserRole.withSession {
+        UsuarioRole.create(testUser, adminRole)
+        UsuarioRole.create(testUser, rolUsuario)
+
+        UsuarioRole.withSession {
             it.flush()
             it.clear()
         }
+
     }
     def destroy = {
     }

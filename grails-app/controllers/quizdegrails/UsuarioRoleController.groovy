@@ -4,76 +4,77 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
-class RoleController {
+class UsuarioRoleController {
 
-    RoleService roleService
+    UsuarioRoleService usuarioRoleService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     @Secured('ROLE_ADMIN')
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond roleService.list(params), model:[roleCount: roleService.count()]
+        respond usuarioRoleService.list(params), model:[usuarioRoleCount: usuarioRoleService.count()]
     }
 
     @Secured('ROLE_ADMIN')
     def show(Long id) {
-        respond roleService.get(id)
+        respond usuarioRoleService.get(id)
     }
 
     @Secured('ROLE_ADMIN')
     def create() {
-        respond new Role(params)
+        respond new UsuarioRole(params)
     }
 
     @Secured('ROLE_ADMIN')
-    def save(Role role) {
-        if (role == null) {
+    def save(UsuarioRole usuarioRole) {
+        if (usuarioRole == null) {
             notFound()
             return
         }
 
         try {
-            roleService.save(role)
+            usuarioRoleService.save(usuarioRole)
         } catch (ValidationException e) {
-            respond role.errors, view:'create'
+            respond usuarioRole.errors, view:'create'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'role.label', default: 'Role'), role.id])
-                redirect role
+                flash.message = message(code: 'default.created.message', args: [message(code: 'usuarioRole.label', default: 'UsuarioRole'), usuarioRole.id])
+                redirect usuarioRole
             }
-            '*' { respond role, [status: CREATED] }
+            '*' { respond usuarioRole, [status: CREATED] }
         }
     }
 
     @Secured('ROLE_ADMIN')
     def edit(Long id) {
-        respond roleService.get(id)
+        respond usuarioRoleService.get(id)
     }
 
     @Secured('ROLE_ADMIN')
-    def update(Role role) {
-        if (role == null) {
+    def update(UsuarioRole usuarioRole) {
+        if (usuarioRole == null) {
             notFound()
             return
         }
 
         try {
-            roleService.save(role)
+            usuarioRoleService.save(usuarioRole)
         } catch (ValidationException e) {
-            respond role.errors, view:'edit'
+            respond usuarioRole.errors, view:'edit'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'role.label', default: 'Role'), role.id])
-                redirect role
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'usuarioRole.label', default: 'UsuarioRole'), usuarioRole.id])
+                redirect usuarioRole
             }
-            '*'{ respond role, [status: OK] }
+            '*'{ respond usuarioRole, [status: OK] }
         }
     }
 
@@ -84,11 +85,11 @@ class RoleController {
             return
         }
 
-        roleService.delete(id)
+        usuarioRoleService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'role.label', default: 'Role'), id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'usuarioRole.label', default: 'UsuarioRole'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }
@@ -98,7 +99,7 @@ class RoleController {
     protected void notFound() {
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'usuarioRole.label', default: 'UsuarioRole'), params.id])
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }
