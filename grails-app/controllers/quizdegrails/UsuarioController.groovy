@@ -50,8 +50,8 @@ class UsuarioController {
             println(x)
             def evento = Evento.findById(Long.parseLong(x))
             println(evento: evento)
-            UsuarioEvento usuarioEvento= new UsuarioEvento(usuario:usuario, evento: evento).save()
-//            usuarioEventoService.save(usuarioEvento)
+            println(usuario: usuario)
+            UsuarioEvento usuarioEvento = new UsuarioEvento(user: usuario, evento: evento).save(failOnError: true)
             println(usuarioEvento)
         }
 
